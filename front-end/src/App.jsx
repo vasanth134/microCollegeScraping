@@ -1,56 +1,50 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 
 function App() {
     const [jobs, setJobs] = useState([]);
     const [query, setQuery] = useState('');
     const [location, setLocation] = useState('');
+    const [error, setError] = useState(null);
 
     const fetchJobs = async () => {
         try {
-            const response = await axios.get(`http://localhost:3001/jobs`, {
-                params: {
-                    q: query,
-                    location: location,
-                }
+            const response = await axios.get('http://localhost:3001/jobs', {
+                params: { q: query, location: location }
             });
             setJobs(response.data);
-        } catch (error) {
-            console.error('There was an error fetching the jobs!', error);
+            setError(null);
+        } catch (err) {
+            console.error('There was an error fetching the jobs!', err);
+            setError('There was an error fetching the jobs!');
         }
     };
 
-    useEffect(() => {
-        if (query && location) {
-            fetchJobs();
-        }
-    }, [query, location]);
-
     return (
-        <div className="App">
-            <h1>Job Listings</h1>
-            <div>
-                <input
-                    type="text"
-                    placeholder="Job Title"
-                    value={query}
-                    onChange={(e) => setQuery(e.target.value)}
-                />
-                <input
-                    type="text"
-                    placeholder="Location"
-                    value={location}
-                    onChange={(e) => setLocation(e.target.value)}
-                />
-                <button onClick={fetchJobs}>Search</button>
-            </div>
+        <div>
+            <h1>Job Search</h1>
+            <input
+                type="text"
+                value={query}
+                onChange={(e) => setQuery(e.target.value)}
+                placeholder="Job title"
+            />
+            <input
+                type="text"
+                value={location}
+                onChange={(e) => setLocation(e.target.value)}
+                placeholder="Location"
+            />
+            <button onClick={fetchJobs}>Search</button>
+            {error && <p>{error}</p>}
             <ul>
                 {jobs.map((job, index) => (
                     <li key={index}>
-                        <h2>{job.title}</h2>
-                        <p>{job.company}</p>
-                        <p>{job.location}</p>
-                        <a href={job.link} target="_blank" rel="noopener noreferrer">Apply</a>
+                        <a href={job.link} target="_blank" rel="noopener noreferrer">
+                            <h3>{job.title}</h3>
+                            <p>{job.company}</p>
+                            <p>{job.location}</p>
+                        </a>
                     </li>
                 ))}
             </ul>

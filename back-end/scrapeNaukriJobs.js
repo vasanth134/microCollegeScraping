@@ -6,14 +6,14 @@ async function scrapeNaukriJobs(query, location, page = 1) {
     await naukriPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
 
     // Construct the Naukri job search URL with pagination and location
-    const searchUrl = `https://www.naukri.com/${encodeURIComponent(query)}-jobs-in-${encodeURIComponent(location)}-${page}`;
+    const searchUrl = `https://www.naukri.com/${encodeURIComponent(query)}-jobs-in-${encodeURIComponent(location)}?page=${page}`;
     await naukriPage.goto(searchUrl, { waitUntil: 'networkidle2' });
 
     // Wait for job cards to load
-    await naukriPage.waitForSelector('.jobTuple', { timeout: 90000 });
+    await naukriPage.waitForSelector('.jobTuple.bgWhite.br4.mb-8', { timeout: 90000 });
 
     const jobs = await naukriPage.evaluate(() => {
-        const jobElements = Array.from(document.querySelectorAll('.jobTuple'));
+        const jobElements = Array.from(document.querySelectorAll('.jobTuple.bgWhite.br4.mb-8'));
         return jobElements.map(job => {
             const titleElement = job.querySelector('.title');
             const companyElement = job.querySelector('.subTitle');
