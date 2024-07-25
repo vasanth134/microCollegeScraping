@@ -98,3 +98,21 @@ app.get('/jobs', async (req, res) => {
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
+
+
+
+
+
+
+
+// const jobElements = Array.from(document.querySelectorAll('.cust-job-tuple'));
+// if (jobElements.length === 0) {
+//     console.error('No job elements found.');
+// }
+// const today = new Date();
+// return jobElements.map(job => {
+//     const titleElement = job.querySelector('a.title');
+//     const companyElement = job.querySelector('a.comp-name');
+//     const locationElement = job.querySelector('.locWdth');
+//     const linkElement = job.querySelector('a.title');
+//     const dateElement = job.querySelector('.job-post-day'); 
