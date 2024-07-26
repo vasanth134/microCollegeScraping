@@ -20,12 +20,14 @@ async function scrapeNaukriJobs(query, location, page = 1) {
     );
 
     return jobElements.map((job) => {
+     
       const titleElement = job.querySelector("a.title");
       const companyElement = job.querySelector("a.comp-name");
       const locationElement = job.querySelector(".locWdth");
       const linkElement = job.querySelector("a.title");
       const dateElement = job.querySelector(".job-post-day");
 
+      const webSite = "Naukri";
       const title = titleElement ? titleElement.innerText.trim() : "No title";
       const company = companyElement
         ? companyElement.innerText.trim()
@@ -36,13 +38,16 @@ async function scrapeNaukriJobs(query, location, page = 1) {
       const link = linkElement ? linkElement.href : "No URL";
       const dateText = dateElement ? dateElement.innerText.trim() : "No date";
 
-      return {
+      if (link !== ""){
+        return {
+        webSite,
         title,
         company,
         location,
         link,
         date: dateText,
       };
+      }
     });
   });
 

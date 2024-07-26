@@ -37,8 +37,9 @@ async function scrapeLinkedInJobs(query, location, page = 1) {
       const link = linkElement ? linkElement.href : "No URL";
  const date = dateElement ? dateElement.innerText.trim() : "No date";
 
-
+      if (link !== ""){
       return { title, company, location, link, date };
+      }
     });
   });
 

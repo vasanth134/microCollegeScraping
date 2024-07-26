@@ -44,8 +44,9 @@ async function scrapeIndeedJobs(query, location, page = 1) {
         ? `https://www.indeed.com${linkElement.getAttribute("href")}`
         : "No URL";
       const date = dateElement ? dateElement.innerText.trim() : "No date";
-
+      if (link !== ""){
       return { title, company, location, link, date };
+      }
     });
   });
 
