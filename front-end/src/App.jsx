@@ -41,9 +41,12 @@ function App() {
                 {jobs.map((job, index) => (
                     <li key={index}>
                         <a href={job.link} target="_blank" rel="noopener noreferrer">
+                            <h2>{job.webSite}</h2>
                             <h3>{job.title}</h3>
                             <p>{job.company}</p>
+                            <p>{job.salary}</p>
                             <p>{job.location}</p>
+                            <p>{job.date}</p>
                         </a>
                     </li>
                 ))}
