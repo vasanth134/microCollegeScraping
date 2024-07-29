@@ -20,19 +20,21 @@ app.get('/test-linkedin', async (req, res) => {
     const query = req.query.q;
     const location = req.query.location;
     const page = parseInt(req.query.page) || 1;
+    const dateRange = req.query.dateRange || 'r2592000'; // Default to one month
 
     if (!query || !location) {
         return res.status(400).json({ error: 'Query and location parameters are required' });
     }
 
     try {
-        const jobs = await scrapeLinkedInJobs(query, location, page);
+        const jobs = await scrapeLinkedInJobs(query, location, page, dateRange);
         res.json(jobs);
     } catch (error) {
         console.error('Error in LinkedIn scraper:', error);
         res.status(500).json({ error: 'Failed to scrape LinkedIn' });
     }
 });
+
 
 app.get('/test-indeed', async (req, res) => {
     const query = req.query.q;
@@ -74,6 +76,7 @@ app.get('/jobs', async (req, res) => {
     const query = req.query.q;
     const location = req.query.location;
     const page = parseInt(req.query.page) || 1;
+    const dateRange = req.query.dateRange || 'r2592000'; // Default to one month
 
     if (!query || !location) {
         return res.status(400).json({ error: 'Query and location parameters are required' });
@@ -81,7 +84,7 @@ app.get('/jobs', async (req, res) => {
 
     try {
         const [linkedinJobs, indeedJobs, naukriJobs] = await Promise.all([
-            scrapeLinkedInJobs(query, location, page),
+            scrapeLinkedInJobs(query, location, page, dateRange),
             scrapeIndeedJobs(query, location, page),
             scrapeNaukriJobs(query, location, page)
         ]);
@@ -94,6 +97,7 @@ app.get('/jobs', async (req, res) => {
         res.status(500).json({ error: 'Failed to scrape job sites' });
     }
 });
+
 
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
