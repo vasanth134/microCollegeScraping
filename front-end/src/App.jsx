@@ -1,12 +1,20 @@
-import React, { useState } from 'react';
-import axios from 'axios';
-import './App.css';
+import React, { useState } from "react";
+import axios from "axios";
+import "./App.css";
 
 const App = () => {
-  const [query, setQuery] = useState('');
-  const [location, setLocation] = useState('');
+  const [query, setQuery] = useState("");
+  const [location, setLocation] = useState("");
   const [postedWithin, setPostedWithin] = useState(30); // Default to 1 month (30 days)
   const [jobs, setJobs] = useState([]);
+  const [loading, setLoading] = useState(false); // Add loading state
+
+  const dateRangeMap = {
+    1: { linkedin: "r86400", naukri: "1day", indeed: 1 }, // 1 Day
+    7: { linkedin: "r604800", naukri: "7days", indeed: 7 }, // 7 Days
+    15: { linkedin: "r1296000", naukri: "15days", indeed: 15 }, // 15 Days (approximately 15 days)
+    30: { linkedin: "r2592000", naukri: "30days", indeed: 30 }, // 1 Month
+  };
 
   const handleSearch = async () => {
     if (!query || !location) {
@@ -14,24 +22,25 @@ const App = () => {
       return;
     }
 
-    // Map the postedWithin value to the corresponding LinkedIn date range
-    const dateRangeMap = {
-      1: 'r864008',     // 1 Day
-      7: 'r6044800',    // 7 Days
-      15: 'r1296000',   // 15 Days (approximately 15 days)
-      30: 'r2592000'    // 1 Month
-    };
-
-    const dateRange = dateRangeMap[postedWithin] || 'r2592000';
+    const dateRange = dateRangeMap[postedWithin];
+    setLoading(true); // Set loading to true before starting fetch
 
     try {
-      const response = await axios.get('http://localhost:3001/jobs', {
-        params: { q: query, location: location, dateRange }
+      const response = await axios.get("http://localhost:3001/jobs", {
+        params: {
+          q: query,
+          location: location,
+          linkedinDateRange: dateRange.linkedin,
+          naukriDateRange: dateRange.naukri,
+          indeedDateRange: dateRange.indeed,
+        },
       });
       setJobs(response.data);
     } catch (error) {
-      console.error('Error fetching job data:', error);
-      alert('Error fetching job data. Please try again later.');
+      console.error("Error fetching job data:", error);
+      alert("Error fetching job data. Please try again later.");
+    } finally {
+      setLoading(false); // Set loading to false after fetch completes
     }
   };
 
@@ -62,10 +71,14 @@ const App = () => {
           <option value={15}>15 Days</option>
           <option value={30}>1 Month</option>
         </select>
-        <button onClick={handleSearch}>Search</button>
+        <button onClick={handleSearch} disabled={loading}>
+          {loading ? 'Searching...' : 'Search'}
+        </button>
       </div>
       <div className="results-container">
-        {jobs.length > 0 ? (
+        {loading ? (
+          <div className="loader">Loading...</div> // Display loader while fetching
+        ) : jobs.length > 0 ? (
           jobs.map((job, index) => (
             <div key={index} className="job-card">
               <h3>{job.title}</h3>

@@ -3,14 +3,14 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
 
-async function scrapeIndeedJobs(query, location, page = 1) {
-  const browser = await puppeteer.launch({ headless: true }); // Run in headless mode
+async function scrapeIndeedJobs(query, location, page = 1,dateRange = 30) {
+  const browser = await puppeteer.launch({ headless: false }); // Run in headless mode
   const indeedPage = await browser.newPage();
   await indeedPage.setViewport({ width: 1280, height: 800 });
   await indeedPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
 
   // Construct the Indeed job search URL with pagination and location
-  const searchUrl = `https://in.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&start=${(page - 1) * 10}`;
+  const searchUrl = `https://in.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=${dateRange}&start=${(page - 1) * 10}`;
   await indeedPage.goto(searchUrl, { waitUntil: 'networkidle2' });
 
   // Wait for job cards to load

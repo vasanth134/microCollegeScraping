@@ -4,7 +4,7 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 
 async function scrapeLinkedInJobs(query, location, page = 1, dateRange = 'r2592000') {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({ headless: false });
   const linkedinPage = await browser.newPage();
   await linkedinPage.setViewport({ width: 1280, height: 800 });
   await linkedinPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds

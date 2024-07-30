@@ -3,14 +3,14 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
 
-async function scrapeNaukriJobs(query, location, page = 1) {
-  const browser = await puppeteer.launch({ headless: true }); // Run in headless mode
+async function scrapeNaukriJobs(query, location, page = 1,dateRange = '30days') {
+  const browser = await puppeteer.launch({ headless: false }); // Run in headless mode
   const naukriPage = await browser.newPage();
   await naukriPage.setViewport({ width: 1280, height: 800 });
   await naukriPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
 
   // Construct the Naukri job search URL with pagination and location
-  const searchUrl = `https://www.naukri.com/${encodeURIComponent(query)}-jobs-in-${encodeURIComponent(location)}-${page}`;
+  const searchUrl = `https://www.naukri.com/${encodeURIComponent(query)}-jobs-in-${encodeURIComponent(location)}-${page}?date=${dateRange}`;
   await naukriPage.goto(searchUrl, { waitUntil: 'networkidle2' });
 
   // Wait for job cards to load
