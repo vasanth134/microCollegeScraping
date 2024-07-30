@@ -3,8 +3,8 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
 
-async function scrapeNaukriJobs(query, location, page = 1,dateRange = '30days') {
-  const browser = await puppeteer.launch({ headless: true }); // Run in headless mode
+async function scrapeNaukriJobs(query, location, page = 1, dateRange = '30days') {
+  const browser = await puppeteer.launch({ headless: true });
   const naukriPage = await browser.newPage();
   await naukriPage.setViewport({ width: 1280, height: 800 });
   await naukriPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
@@ -14,12 +14,13 @@ async function scrapeNaukriJobs(query, location, page = 1,dateRange = '30days') 
   await naukriPage.goto(searchUrl, { waitUntil: 'networkidle2' });
 
   // Wait for job cards to load
-  await naukriPage.waitForSelector('.cust-job-tuple', { timeout: 90000 }); // Adjust the selector based on the actual DOM structure
+  await naukriPage.waitForSelector('.cust-job-tuple', { timeout: 90000 });
 
+  // Extract job details
   const jobs = await naukriPage.evaluate(() => {
     const jobElements = Array.from(document.querySelectorAll('.cust-job-tuple'));
 
-    return jobElements.map((job) => {
+    return jobElements.map(job => {
       const titleElement = job.querySelector('a.title');
       const companyElement = job.querySelector('a.comp-name');
       const salaryElement = job.querySelector('.sal-wrap > .ni-job-tuple-icon > span');
@@ -28,17 +29,15 @@ async function scrapeNaukriJobs(query, location, page = 1,dateRange = '30days') 
       const dateElement = job.querySelector('.job-post-day');
 
       const webSite = 'Naukri';
-      const title = titleElement ? titleElement.innerText.trim() : 'No title';
-      const company = companyElement ? companyElement.innerText.trim() : 'No company';
-      const salary = salaryElement ? salaryElement.innerText.trim() : 'Not Mentioned';
-      const location = locationElement ? locationElement.innerText.trim() : 'No location';
-      const link = linkElement ? linkElement.href : 'No URL';
-      const dateText = dateElement ? dateElement.innerText.trim() : 'No date';
+      const title = titleElement?.innerText.trim() || 'No title';
+      const company = companyElement?.innerText.trim() || 'No company';
+      const salary = salaryElement?.innerText.trim() || 'Not Mentioned';
+      const location = locationElement?.innerText.trim() || 'No location';
+      const link = linkElement?.href || 'No URL';
+      const dateText = dateElement?.innerText.trim() || 'No date';
 
-      if (link !== '') {
-        return { webSite, title, company, salary, location, link, date: dateText };
-      }
-    }).filter(Boolean); // Filter out undefined entries
+      return link !== 'No URL' ? { webSite, title, company, salary, location, link, date: dateText } : null;
+    }).filter(Boolean); // Filter out null entries
   });
 
   await browser.close();

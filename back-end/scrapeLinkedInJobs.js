@@ -16,10 +16,9 @@ async function scrapeLinkedInJobs(query, location, page = 1, dateRange = 'r25920
   // Wait for job cards to load
   await linkedinPage.waitForSelector('.jobs-search__results-list li', { timeout: 90000 });
 
+  // Extract job details
   const jobs = await linkedinPage.evaluate(() => {
-    const jobElements = Array.from(document.querySelectorAll('.jobs-search__results-list li'));
-
-    return jobElements.map((job) => {
+    return Array.from(document.querySelectorAll('.jobs-search__results-list li')).map(job => {
       const titleElement = job.querySelector('h3');
       const companyElement = job.querySelector('h4');
       const salaryElement = job.querySelector('#ember1702 > ul > li');
@@ -28,17 +27,15 @@ async function scrapeLinkedInJobs(query, location, page = 1, dateRange = 'r25920
       const dateElement = job.querySelector('time');
 
       const webSite = 'LinkedIn';
-      const title = titleElement ? titleElement.innerText.trim() : 'No title';
-      const company = companyElement ? companyElement.innerText.trim() : 'No company';
-      const salary = salaryElement ? salaryElement.innerText.trim() : 'Not Mentioned';
-      const location = locationElement ? locationElement.innerText.trim() : 'No location';
+      const title = titleElement?.innerText.trim() || 'No title';
+      const company = companyElement?.innerText.trim() || 'No company';
+      const salary = salaryElement?.innerText.trim() || 'Not Mentioned';
+      const location = locationElement?.innerText.trim() || 'No location';
       const link = linkElement ? linkElement.href : 'No URL';
-      const date = dateElement ? dateElement.innerText.trim() : 'No date';
+      const date = dateElement?.innerText.trim() || 'No date';
 
-      if (link !== '') {
-        return { webSite, title, company, salary, location, link, date };
-      }
-    }).filter(Boolean); // Filter out undefined entries
+      return link !== 'No URL' ? { webSite, title, company, salary, location, link, date } : null;
+    }).filter(Boolean); // Filter out null entries
   });
 
   await browser.close();
