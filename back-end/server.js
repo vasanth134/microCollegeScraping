@@ -7,7 +7,12 @@ const scrapeNaukriJobs = require("./scrapeNaukriJobs");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-app.use(cors());
+app.use(cors({
+
+  origin : ["https://micro-college-scraping-server.vercel.app/"],
+  methods : ["POST" , "GET"],
+  credentials : true
+}));
 
 const validateQueryParams = (query) => {
   if (!query.q || !query.location) {
