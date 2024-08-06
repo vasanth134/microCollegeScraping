@@ -9,7 +9,7 @@ const PORT = process.env.PORT || 3001;
 
 app.use(cors({
 
-  origin : ["https://micro-college-scraping-server.vercel.app/"],
+  origin : ["https://micro-college-scraping-client.vercel.app"],
   methods : ["POST" , "GET"],
   credentials : true
 }));

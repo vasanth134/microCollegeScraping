@@ -26,7 +26,7 @@ const App = () => {
     setLoading(true); // Set loading to true before starting fetch
 
     try {
-      const response = await axios.get("http://localhost:3001/jobs", {
+      const response = await axios.get("https://micro-college-scraping-server.vercel.app", {
         params: {
           q: query,
           location: location,
