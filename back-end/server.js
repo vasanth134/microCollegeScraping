@@ -5,7 +5,7 @@ const scrapeIndeedJobs = require("./scrapeIndeedJobs");
 const scrapeNaukriJobs = require("./scrapeNaukriJobs");
 
 const app = express();
-const PORT = process.env.PORT || 100000;
+const PORT = process.env.PORT || 3001;
 
 app.use(cors());
 
