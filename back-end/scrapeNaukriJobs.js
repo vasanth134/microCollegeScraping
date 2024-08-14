@@ -1,7 +1,7 @@
 const { executablePath } = require("puppeteer");
 const puppeteer = require("puppeteer-extra");
 const StealthPlugin = require("puppeteer-extra-plugin-stealth");
-require("dotenv").config();
+
 
 puppeteer.use(StealthPlugin());
 
@@ -11,16 +11,7 @@ async function scrapeNaukriJobs(
   page = 1,
   dateRange = "30days"
 ) {
-  const browser = await puppeteer.launch({
-    args: ["--disable-setuid-sandbox",
-      "--no-sandbox",
-      "--single-process",
-      "--no-zygote",
-    ],
-    executablePath:
-      process.env.NODE_ENV === "production"
-        ? process.env.PUPPETEER_EXECUTABLE_PATH
-        : puppeteer.executablePath(),
+  const browser = await puppeteer.launch({headless : true
   });
   const naukriPage = await browser.newPage();
   await naukriPage.setViewport({ width: 1280, height: 800 });
