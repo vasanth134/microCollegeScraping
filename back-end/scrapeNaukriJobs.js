@@ -11,7 +11,7 @@ async function scrapeNaukriJobs(
   page = 1,
   dateRange = "30days"
 ) {
-  const browser = await puppeteer.launch({headless : true
+  const browser = await puppeteer.launch({headless : false
   });
   const naukriPage = await browser.newPage();
   await naukriPage.setViewport({ width: 1280, height: 800 });
