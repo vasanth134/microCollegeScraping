@@ -4,7 +4,7 @@ const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 puppeteer.use(StealthPlugin());
 
 async function scrapeIndeedJobs(query, location, page = 1, dateRange = 30) {
-  const browser = await puppeteer.launch({ headless: true });
+  const browser = await puppeteer.launch({headless : false});
   const indeedPage = await browser.newPage();
   await indeedPage.setViewport({ width: 1280, height: 800 });
   await indeedPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
