@@ -1,6 +1,8 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import axios from "axios";
 import "./App.css";
+import HeaderLogin from "./components/HeaderLogin";
+import Hero from "./pages/Hero";
 
 const App = () => {
   const [query, setQuery] = useState("");
@@ -45,10 +47,11 @@ const App = () => {
   };
 
   return (
+    <>
+    <HeaderLogin/>
+    <Hero/>
     <div className="app-container">
-      <header>
         <h1>Job Search</h1>
-      </header>
       <div className="search-container">
         <input
           type="text"
@@ -97,6 +100,8 @@ const App = () => {
         )}
       </div>
     </div>
+    </>
+
   );
 };
 
