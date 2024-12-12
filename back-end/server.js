@@ -56,13 +56,13 @@ app.get("/jobs", async (req, res) => {
     validateQueryParams(req.query);
     const { q, location, linkedinDateRange, naukriDateRange, indeedDateRange } = req.query;
 
-    const [linkedinJobs, naukriJobs, indeedJobs] = await Promise.all([
-      scrapeLinkedInJobs(q, location, 1, linkedinDateRange),
+    const [ linkedinJobs,naukriJobs, indeedJobs] = await Promise.all([                   
+     scrapeLinkedInJobs(q, location, 1, linkedinDateRange),
       scrapeNaukriJobs(q, location, 1, naukriDateRange),
       scrapeIndeedJobs(q, location, 1, indeedDateRange)
     ]);
 
-    const jobs = [...linkedinJobs, ...naukriJobs, ...indeedJobs];
+    const jobs = [ ...linkedinJobs,...naukriJobs, ...indeedJobs];                                 
     res.json(jobs);
   } catch (error) {
     console.error("Error in combined job scraper:", error);

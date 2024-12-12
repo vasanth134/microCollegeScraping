@@ -2,12 +2,19 @@ const puppeteer = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 
 puppeteer.use(StealthPlugin());
+const { executablePath} = require('puppeteer');
 
 async function scrapeIndeedJobs(query, location, page = 1, dateRange = 30) {
-  const browser = await puppeteer.launch({headless : false});
+  const browser = await puppeteer.launch({headless : false , executablePath : executablePath() });
   const indeedPage = await browser.newPage();
   await indeedPage.setViewport({ width: 1280, height: 800 });
   await indeedPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
+
+
+
+
+
+
 
   // Construct the Indeed job search URL with pagination and location
   const searchUrl = `https://in.indeed.com/jobs?q=${encodeURIComponent(query)}&l=${encodeURIComponent(location)}&fromage=${dateRange}&start=${(page - 1) * 10}`;
