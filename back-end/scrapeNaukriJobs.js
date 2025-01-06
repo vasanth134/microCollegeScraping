@@ -11,8 +11,11 @@ async function scrapeNaukriJobs(
   page = 1,
   dateRange = "30days"
 ) {
-  const browser = await puppeteer.launch({headless : false
+  const browser = await puppeteer.launch({
+headless:false ,    args: ['--no-sandbox', '--disable-setuid-sandbox']
   });
+  
+  
   const naukriPage = await browser.newPage();
   await naukriPage.setViewport({ width: 1280, height: 800 });
   await naukriPage.setDefaultTimeout(90000); // Increase timeout to 90 seconds
