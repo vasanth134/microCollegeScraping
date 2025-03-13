@@ -2,6 +2,9 @@
   font-family: Arial, sans-serif;
   text-align: center;
   padding: 20px;
+  position: sticky;
+  bottom: 30%;
+  left: 25%;
 }
 
 
@@ -28,14 +31,22 @@
 
 .results-container {
   margin-top: 20px;
+  
+display: flex;
+flex-direction: column;
+justify-content: center;
+align-items: center;
 }
 
 .job-card {
+/* display: inline-block; */
   border: 1px solid #ddd;
   border-radius: 5px;
+  width: 500px;
   padding: 15px;
   margin: 10px 0;
   text-align: left;
+  
 }
 
 .job-card h3 {

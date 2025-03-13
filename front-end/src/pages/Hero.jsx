@@ -1,4 +1,4 @@
-import Search from "../components/Search";
+// import Search from "../components/Search";
 import Marquee from "react-fast-marquee";
 
 export default function Hero() {
@@ -15,7 +15,7 @@ export default function Hero() {
         </p>
       </div>
       <div className="flex justify-center py-10">
-        <Search />
+        {/* <Search /> */}
       </div>
       <div className="flex flex-col gap-10 mt-10">
         <Marquee gradient={false} autoFill={true} pauseOnHover={true}>
